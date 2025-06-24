@@ -114,9 +114,8 @@ export const LogItemWrapper = styled.div`
       }
     }
   }
-`;
-
-export const PaginationWrapper = styled.div`
+`;export const PaginationWrapper = styled.div`
   padding-top: 10px;
   /* height: 75px; */
 `;
+

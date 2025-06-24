@@ -24,9 +24,9 @@ type TimerState = {
 };
 
 export const defaultTimer = {
-  coding: 6 * 60 * 60,
-  interview: 2 * 60 * 60,
-  job: 2 * 60 * 60,
+  coding: 3 * 60 * 60,    // 3 hours
+  interview: 1 * 60 * 60, // 1 hour
+  job: 1 * 60 * 60,      // 1 hour
 };
 
 type TimerType = "coding" | "interview" | "job" | null;

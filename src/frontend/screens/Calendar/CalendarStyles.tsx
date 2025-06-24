@@ -9,19 +9,23 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 110px;
+  background: linear-gradient(to bottom, ${COLORS.white}, #f8f9fa);
+  
   @media screen and (min-width: 800px) {
     height: 670px;
-    width: 80%;
-    margin-left: 18%;
-    margin-right: 10%;
+    width: 85%;
+    margin-left: 15%;
+    padding: 2rem;
   }
 `;
 
 export const CalendarContainer = styled.div`
   .ant-picker-calendar {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: ${COLORS.white};
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.05);
   }
 
   .ant-picker-calendar-full .ant-picker-panel {
@@ -29,79 +33,113 @@ export const CalendarContainer = styled.div`
   }
 
   .ant-picker-cell {
-    padding: 4px !important;
-    height: 80px !important;
+    padding: 6px !important;
+    height: 100px !important;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.02);
+    }
   }
 
   .ant-picker-calendar-date {
     height: 100% !important;
     margin: 0 !important;
-    padding: 4px !important;
+    padding: 6px !important;
     border: none !important;
-    border-radius: 4px !important;
+    border-radius: 12px !important;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.02);
+    }
   }
 
   .ant-picker-cell-today .ant-picker-calendar-date {
-    border: 2px solid ${COLORS.Active} !important;
+    border: 2px solid ${COLORS.Primary}40 !important;
+    background-color: ${COLORS.Primary}05 !important;
   }
 
   .ant-picker-calendar-date-value {
-    color: #000;
-    font-weight: 500;
-    margin: 0 0 4px 4px;
+    color: ${COLORS.Secondary};
+    font-weight: 600;
+    margin: 0 0 6px 6px;
+    font-size: 0.9rem;
   }
 
   .ant-picker-cell-in-view {
-    color: #000 !important;
+    color: ${COLORS.Secondary} !important;
   }
 
   .ant-picker-calendar-date-content {
-    height: calc(100% - 20px) !important;
+    height: calc(100% - 24px) !important;
   }
 
   .calendar-navigation {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 20px;
-    margin-bottom: 24px;
-    padding: 0 16px;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 32px;
+    padding: 0 24px;
+    background: ${COLORS.white};
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    height: 64px;
   }
 
   .nav-button {
     border: none;
     background: transparent;
-    font-size: 20px;
+    font-size: 22px;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    transition: all 0.2s ease;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    color: ${COLORS.Primary};
 
     &:hover {
-      background: rgba(0, 0, 0, 0.05);
+      background: ${COLORS.Primary}10;
+      transform: scale(1.05);
+    }
+
+    &:active {
+      transform: scale(0.95);
     }
 
     .anticon {
-      color: ${COLORS.Active};
+      color: ${COLORS.Primary};
     }
   }
 
   .current-month {
-    font-size: 20px;
-    font-weight: 500;
-    color: #000;
-    min-width: 160px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: ${COLORS.Primary};
+    min-width: 180px;
     text-align: center;
+    letter-spacing: -0.5px;
+  }
+
+  .ant-picker-content {
+    th {
+      padding: 12px 0;
+      font-weight: 600;
+      color: ${COLORS.Secondary};
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
   }
 
   @media screen and (min-width: 800px) {
     padding: 24px;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    background: ${COLORS.white};
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
   }
 `;
 
@@ -111,46 +149,53 @@ export const DateCell = styled.div<{ backgroundColor: string; isToday: boolean }
   display: flex;
   flex-direction: column;
   background-color: ${props => props.backgroundColor};
-  border-radius: 4px;
-  padding: 4px;
+  border-radius: 12px;
+  padding: 8px;
   position: relative;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.04);
 
   ${props => props.isToday && `
-    border: 2px solid ${COLORS.Active};
+    border: 2px solid ${COLORS.Primary}40;
+    background-color: ${COLORS.Primary}05;
   `}
 
   &:hover {
-    transform: scale(1.02);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   }
 
   .date-number {
-    color: #000;
-    font-weight: 500;
-    margin-bottom: 4px;
+    color: ${COLORS.Secondary};
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 0.9rem;
   }
 
   .note-indicator {
     position: absolute;
-    bottom: 4px;
-    right: 4px;
-    width: 6px;
-    height: 6px;
+    bottom: 6px;
+    right: 6px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
-    background-color: ${COLORS.Active};
+    background-color: ${COLORS.Primary};
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8);
   }
 
   .activity-indicators {
     display: flex;
-    gap: 2px;
-    margin-top: 2px;
+    gap: 3px;
+    margin-top: 4px;
+    flex-wrap: wrap;
   }
 
   .activity-dot {
-    width: 4px;
-    height: 4px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4);
   }
 `;
 
@@ -181,15 +226,29 @@ const getColor = (isFuture: boolean, checked?: boolean, disabled?: boolean) => {
 export const StyledCheckbox = styled(Checkbox).withConfig({
   shouldForwardProp: (prop) => !["isFuture"].includes(prop),
 })<{ isFuture: boolean }>`
+  .ant-checkbox {
+    border-radius: 6px;
+    transition: all 0.3s ease;
+  }
+
   .ant-checkbox-inner {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
     background-color: ${({ isFuture, checked, disabled }) =>
       getColor(isFuture, checked, disabled).backgroundColor};
     border-color: ${({ isFuture, checked, disabled }) =>
       getColor(isFuture, checked, disabled).borderColor};
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: scale(1.05);
+    }
   }
 
   .ant-checkbox-checked .ant-checkbox-inner {
-    background-color: ${COLORS.checkbox.bg_active} !important;
+    background-color: ${COLORS.Primary} !important;
+    border-color: ${COLORS.Primary} !important;
   }
 
   .ant-checkbox-checked .ant-checkbox-inner::after {
@@ -197,7 +256,7 @@ export const StyledCheckbox = styled(Checkbox).withConfig({
   }
 
   .ant-checkbox-disabled .ant-checkbox-inner {
-    opacity: 0.7;
+    opacity: 0.6;
   }
 `;
 
@@ -205,7 +264,7 @@ export const BottomModal = styled(Modal)`
   @media screen and (max-width: 700px) {
     &.ant-modal {
       position: fixed;
-      bottom: -20px;
+      bottom: 0;
       top: auto;
       left: 0;
       right: 0;
@@ -218,8 +277,8 @@ export const BottomModal = styled(Modal)`
       border-radius: 24px 24px 0 0;
       padding: 24px;
       margin: 0;
-      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
-      background-color: #f8f9fa;
+      box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.1);
+      background-color: ${COLORS.white};
     }
 
     .ant-modal-header {
@@ -229,13 +288,14 @@ export const BottomModal = styled(Modal)`
     }
 
     .ant-modal-title {
-      font-size: 20px;
+      font-size: 1.25rem;
       font-weight: 600;
-      color: #333;
+      color: ${COLORS.Primary};
+      letter-spacing: -0.5px;
     }
 
     .ant-modal-body {
-      padding: 16px 0;
+      padding: 20px 0;
     }
 
     .ant-modal-footer {
@@ -249,27 +309,43 @@ export const BottomModal = styled(Modal)`
 
 export const StyledTextArea = styled(TextArea)`
   border-radius: 12px;
-  border: 1px solid #e0e0e0;
+  border: 2px solid ${COLORS.checkbox.border}20;
   padding: 12px;
-  font-size: 14px;
+  font-size: 1rem;
   resize: none;
-  transition: border-color 0.3s ease;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: ${COLORS.Primary}40;
+  }
 
   &:focus {
-    border-color: #1890ff;
-    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+    border-color: ${COLORS.Primary};
+    box-shadow: 0 0 0 3px ${COLORS.Primary}15;
   }
 `;
 
 export const StyledButton = styled(Button)`
-  border-radius: 12px;
+  height: 40px;
+  border-radius: 10px;
   font-weight: 500;
-  padding: 8px 20px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: all 0.3s ease;
-  width: 120px;
+  border: none;
+  background: ${COLORS.Primary};
+  color: ${COLORS.white};
 
-  &:disabled {
-    background-color: ${COLORS.c2};
-    color: ${COLORS.c1};
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px ${COLORS.Primary}30;
+    background: ${COLORS.Active};
+    color: ${COLORS.white};
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 `;

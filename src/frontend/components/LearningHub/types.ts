@@ -1,4 +1,4 @@
-export type Language = 'C' | 'Java' | 'Python';
+export type Language = 'C' | 'Java' | 'Python' | 'OS' | 'OOP' | 'System Design';
 
 export interface Article {
   id: string;

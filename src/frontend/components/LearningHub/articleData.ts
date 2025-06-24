@@ -68,5 +68,74 @@ export const articles: Article[] = [
     description: 'Build web applications using Django framework with Python.',
     link: 'https://www.djangoproject.com/start/',
     language: 'Python'
+  },
+
+  // Operating System Articles
+  {
+    id: 'os1',
+    title: 'Operating System Fundamentals',
+    description: 'Learn core OS concepts including processes, threads, memory management, and file systems.',
+    link: 'https://www.geeksforgeeks.org/operating-systems/',
+    language: 'OS'
+  },
+  {
+    id: 'os2',
+    title: 'Process Management & Scheduling',
+    description: 'Deep dive into process states, scheduling algorithms, and CPU scheduling concepts.',
+    link: 'https://www.tutorialspoint.com/operating_system/os_process_scheduling.htm',
+    language: 'OS'
+  },
+  {
+    id: 'os3',
+    title: 'Memory Management in OS',
+    description: 'Understanding virtual memory, paging, segmentation, and memory allocation strategies.',
+    link: 'https://www.javatpoint.com/memory-management-in-operating-system',
+    language: 'OS'
+  },
+
+  // Object-Oriented Programming Articles
+  {
+    id: 'oop1',
+    title: 'OOP Core Concepts',
+    description: 'Master the four pillars of OOP: Encapsulation, Inheritance, Polymorphism, and Abstraction.',
+    link: 'https://www.geeksforgeeks.org/object-oriented-programming-oops-concept-in-java/',
+    language: 'OOP'
+  },
+  {
+    id: 'oop2',
+    title: 'SOLID Principles',
+    description: 'Learn the five SOLID principles for writing maintainable and scalable object-oriented code.',
+    link: 'https://www.digitalocean.com/community/conceptual-articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design',
+    language: 'OOP'
+  },
+  {
+    id: 'oop3',
+    title: 'Design Patterns in OOP',
+    description: 'Explore common design patterns: Creational, Structural, and Behavioral patterns.',
+    link: 'https://refactoring.guru/design-patterns',
+    language: 'OOP'
+  },
+
+  // System Design Articles
+  {
+    id: 'sd1',
+    title: 'System Design Fundamentals',
+    description: 'Learn key concepts of distributed systems, scalability, and high availability.',
+    link: 'https://github.com/donnemartin/system-design-primer',
+    language: 'System Design'
+  },
+  {
+    id: 'sd2',
+    title: 'Microservices Architecture',
+    description: 'Understanding microservices patterns, communication, and deployment strategies.',
+    link: 'https://microservices.io/patterns/index.html',
+    language: 'System Design'
+  },
+  {
+    id: 'sd3',
+    title: 'Database Design & Scaling',
+    description: 'Master database sharding, replication, and choosing the right database for your system.',
+    link: 'https://www.educative.io/blog/database-design-tutorial',
+    language: 'System Design'
   }
 ]; 

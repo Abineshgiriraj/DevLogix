@@ -1,72 +1,78 @@
 import styled from "styled-components";
 import { COLORS } from "../../utils/Colors";
+import InfiniteScroll from "react-infinite-scroll-component";
 
-export const LogsWrapper = styled.div`
-  padding: 20px;
-  max-width: 800px;
-  margin: 0 auto;
-  
-  h2 {
-    margin-bottom: 20px;
+export const Wrapper = styled.div`
+  width: calc(100% - 250px);
+  margin-left: 250px;
+  min-height: calc(100vh - 64px);
+  padding: 1.5rem;
+  background-color: #ffffff;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    margin-left: 0;
+    padding: 1rem;
+  }
+`;
+
+export const FilterWrapper = styled.div`
+  margin: 1rem 0;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+`;
+
+export const ContentWrapper = styled.div`
+  margin-top: 1rem;
+`;
+
+export const StyledInfiniteScroll = styled(InfiniteScroll as any)`
+  overflow-x: hidden !important;
+`;
+
+export const LogItemWrapper = styled.div`
+  padding: 1rem;
+  border: 1px solid ${COLORS.checkbox.border};
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  background: #fff;
+
+  .date-wrapper {
     color: ${COLORS.Primary};
+    font-weight: 500;
+    margin-bottom: 1rem;
   }
 
-  .log-item {
-    margin-bottom: 16px;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  .content-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
 
-    .panel-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 16px;
+  .item {
+    .title {
+      color: ${COLORS.Primary};
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
 
-      .date {
-        font-weight: 500;
-        color: ${COLORS.Primary};
-      }
+    .time {
+      color: ${COLORS.Secondary};
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
 
-      .total-time {
+      span {
         color: ${COLORS.Secondary};
+        opacity: 0.7;
+        margin-left: 2px;
+        font-size: 0.8rem;
       }
     }
 
-    .timer-section {
-      padding: 12px 16px;
-      border-bottom: 1px solid ${COLORS.checkbox.border};
-
-      &:last-child {
-        border-bottom: none;
-      }
-
-      .timer-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 8px;
-
-        .title {
-          font-weight: 500;
-          color: ${COLORS.Primary};
-        }
-
-        .timer {
-          color: ${COLORS.Secondary};
-        }
-      }
-
-      .progress-container {
-        height: 4px;
-        background-color: ${COLORS.checkbox.border};
-        border-radius: 2px;
-        overflow: hidden;
-
-        .progress-bar {
-          height: 100%;
-          transition: width 0.3s ease;
-        }
+    .progress-bar {
+      .ant-progress-bg {
+        height: 4px !important;
       }
     }
   }
@@ -77,24 +83,52 @@ export const LoadingContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 300px;
+  min-height: 400px;
   gap: 16px;
 
   p {
     color: ${COLORS.Secondary};
     margin: 0;
+    font-size: 0.95rem;
   }
 `;
 
 export const HeaderSection = styled.div`
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: 20px;
-  padding: 0 16px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
 
-  button {
+  .header-left {
+    h1 {
+      font-size: 1.5rem;
+      color: ${COLORS.Primary};
+      margin: 0;
+    }
+
+    p {
+      color: ${COLORS.Secondary};
+      font-size: 0.9rem;
+      margin: 4px 0 0 0;
+    }
+  }
+
+  .header-right {
     display: flex;
-    align-items: center;
-    gap: 8px;
+    gap: 12px;
+  }
+
+  @media (max-width: 576px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+
+    .header-right {
+      width: 100%;
+      
+      .ant-btn {
+        flex: 1;
+      }
+    }
   }
 `; 

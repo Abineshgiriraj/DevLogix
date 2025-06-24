@@ -1,117 +1,208 @@
-import { useEffect } from "react";
+import { Empty, Input, Spin } from "antd";
+import { SearchProps } from "antd/es/input";
+import { debounce } from "lodash";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Alert, Empty, Spin, Button } from "antd";
-import { ReloadOutlined } from "@ant-design/icons";
-import { GET } from "../../utils/helper";
-import LogItem from "./LogItem";
-import { LogsWrapper, LoadingContainer, HeaderSection } from "./LogsStyles";
+import Header from "../../components/Header/Header";
 import {
+  appendLogs,
+  appendSearchLogs,
+  defaultPagination,
+  initialLogState,
+  LogsResponse,
+  restoreLogs,
   updateLogs,
-  setLoading,
-  setError,
-  clearLogs
 } from "../../reducer/logSlice";
 import { AppDispatch, RootState } from "../../store/store";
-import Header from "../../components/Header/Header";
+import { GET } from "../../utils/helper";
+import LogItem from "./LogItem";
+import styled from "styled-components";
+import InfiniteScroll from "react-infinite-scroll-component";
+
+const Wrapper = styled.div`
+  width: calc(100% - 250px);
+  margin-left: 250px;
+  min-height: calc(100vh - 64px);
+  padding: 1rem;
+  background-color: #ffffff;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    margin-left: 0;
+    padding: 0.75rem;
+  }
+`;
+
+const SearchWrapper = styled.div`
+  margin: 0.5rem 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  .ant-input-search {
+    max-width: 300px;
+  }
+`;
+
+const ContentWrapper = styled.div`
+  margin-top: 0.5rem;
+
+  .ant-spin {
+    margin: 0.5rem 0;
+  }
+
+  .ant-empty {
+    margin: 1rem 0;
+  }
+`;
+
+const StyledInfiniteScroll = styled(InfiniteScroll as any)`
+  overflow-x: hidden !important;
+`;
+
+interface GetLogType {
+  page?: number;
+  limit?: number;
+  search?: string;
+  startDate?: string;
+  endDate?: string;
+}
 
 const Logs: React.FC = () => {
-  const { logs: logsData, loading, error } = useSelector(
+  const [loading, setLoading] = useState(false);
+  const { logs: logsData, pagination } = useSelector(
     ({ logState }: RootState) => logState
   );
-  const dispatch = useDispatch<AppDispatch>();
 
-  const getLogs = async (showLoading = true) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { Search } = Input;
+
+  const getLogs = async () => {
+    let urlString = "dashboard/logs/all?";
     try {
-      if (showLoading) {
-        dispatch(setLoading(true));
+      setLoading(true);
+      const logs: LogsResponse = await GET(urlString, true);
+      if (logs) {
+        dispatch(updateLogs(logs));
       }
-      const res = await GET("logs/", true);
-      if (res?.logs) {
-        dispatch(updateLogs(res.logs));
-        dispatch(setError(null));
-      } else {
-        throw new Error("No logs data received");
-      }
-    } catch (error) {
-      console.error(error);
-      dispatch(setError("Failed to fetch activity logs. Please try again."));
+    } catch (e) {
+      console.log(e);
     } finally {
-      dispatch(setLoading(false));
+      setLoading(false);
     }
   };
 
-  const handleRetry = () => {
-    dispatch(clearLogs());
-    getLogs();
+  const getQueryLogs = async ({
+    page = 0,
+    limit = 10,
+    search = "",
+    startDate = "",
+    endDate = "",
+  }: GetLogType) => {
+    let urlString = "dashboard/logs/all?";
+    if (page) {
+      urlString = urlString.concat(`page=${page}&`);
+    }
+    if (limit) {
+      urlString = urlString.concat(`limit=${limit}&`);
+    }
+    if (search) {
+      urlString = urlString.concat(`search=${search}&`);
+    }
+    if (startDate) {
+      urlString = urlString.concat(`startDate=${startDate}&`);
+    }
+    if (endDate) {
+      urlString = urlString.concat(`endDate=${endDate}&`);
+    }
+    try {
+      setLoading(true);
+      const logs: LogsResponse = await GET(urlString, true);
+      return logs;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Auto-refresh logs every 5 minutes
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (!loading && !error) {
-        getLogs(false);
+  const onSearch: SearchProps["onSearch"] = debounce(async (value) => {
+    try {
+      if (value) {
+        const logs = await getQueryLogs({
+          search: value.trim(),
+        });
+        if (logs) {
+          dispatch(appendSearchLogs(logs));
+        } else {
+          dispatch(
+            appendSearchLogs({
+              logs: [],
+              pagination: defaultPagination,
+            })
+          );
+        }
       }
-    }, 5 * 60 * 1000);
+    } catch (e: any) {
+      console.error(e);
+      if (e?.status === 404) {
+        dispatch(appendSearchLogs(initialLogState));
+      }
+    }
+  }, 500);
 
-    return () => clearInterval(interval);
-  }, [loading, error]);
+  const fetchData = async () => {
+    const logs = await getQueryLogs({
+      page: pagination.currentPage + 1,
+    });
+    if (logs) {
+      dispatch(appendLogs(logs));
+    }
+  };
 
-  // Initial load
+  const onClear = () => {
+    dispatch(restoreLogs());
+  };
+
+  const heightOfInfiniteScroll = Math.floor(window.innerHeight * 0.85);
+
   useEffect(() => {
-    if (!logsData.length && !loading && !error) {
+    if (!logsData.length) {
       getLogs();
     }
   }, []);
 
-  if (loading && !logsData.length) {
-    return (
-      <LoadingContainer>
-        <Spin size="large" />
-        <p>Loading activity logs...</p>
-      </LoadingContainer>
-    );
-  }
-
   return (
-    <LogsWrapper>
-      <Header title="Activity Logs" />
-      
-      <HeaderSection>
-        <Button 
-          icon={<ReloadOutlined />} 
-          onClick={handleRetry}
-          loading={loading}
-        >
-          Refresh
-        </Button>
-      </HeaderSection>
-
-      {error && (
-        <Alert
-          message="Error"
-          description={error}
-          type="error"
-          showIcon
-          action={
-            <Button size="small" type="primary" onClick={handleRetry}>
-              Try Again
-            </Button>
-          }
-          style={{ marginBottom: 16 }}
+    <Wrapper>
+      <Header title="Logs" />
+      <SearchWrapper>
+        <Search
+          placeholder="Search by Date"
+          allowClear
+          onSearch={onSearch}
+          style={{ width: 300 }}
+          onClear={onClear}
         />
-      )}
-
-      {!error && !loading && !logsData.length ? (
-        <Empty
-          description="No activity logs found"
-          image={Empty.PRESENTED_IMAGE_SIMPLE}
-        />
-      ) : (
-        logsData.map((log) => (
-          <LogItem key={log._id} log={log} />
-        ))
-      )}
-    </LogsWrapper>
+      </SearchWrapper>
+      <ContentWrapper>
+        {logsData.length ? (
+          <StyledInfiniteScroll
+            dataLength={logsData.length}
+            next={fetchData}
+            hasMore={logsData.length < pagination.totalLogs}
+            loader={<Spin size="small" />}
+            height={heightOfInfiniteScroll}
+          >
+            {logsData?.map((log) => (
+              <LogItem key={log._id} log={log} />
+            ))}
+          </StyledInfiniteScroll>
+        ) : (
+          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        )}
+      </ContentWrapper>
+      {loading && <Spin />}
+    </Wrapper>
   );
 };
 

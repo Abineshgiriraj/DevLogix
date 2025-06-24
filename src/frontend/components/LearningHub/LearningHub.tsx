@@ -38,7 +38,7 @@ const LearningHub: React.FC = () => {
       grouped[article.language]?.push(article);
     });
 
-    return (['C', 'Java', 'Python'] as const).map(language => ({
+    return (['C', 'Java', 'Python', 'OS', 'OOP', 'System Design'] as const).map(language => ({
       language,
       articles: grouped[language] || []
     }));
