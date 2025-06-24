@@ -229,7 +229,7 @@ const CalendarWithCheckbox = () => {
   const handleNoteChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newNote = e.target.value;
     dispatch(updateNotes({
-      dateString,
+        dateString,
       value: newNote
     }));
     
@@ -289,7 +289,7 @@ const CalendarWithCheckbox = () => {
           {dateData.activities.interview > 0 && (
             <div className="activity-dot" style={{ backgroundColor: '#40c463' }} />
           )}
-        </div>
+      </div>
         {dateData.note && <div className="note-indicator" />}
       </DateCell>
     );
@@ -314,7 +314,7 @@ const CalendarWithCheckbox = () => {
       <Header title={`Calendar - ${currentDate.format('MMMM YYYY')}`} />
       <CalendarContainer {...swipeHandlers}>
         <div className="calendar-navigation">
-          <Button 
+          <Button
             icon={<CaretLeftFilled />} 
             onClick={onLeftClick}
             className="nav-button"
@@ -332,7 +332,7 @@ const CalendarWithCheckbox = () => {
           dateFullCellRender={dateCellRender}
           mode="month"
           headerRender={() => null}
-        />
+          />
       </CalendarContainer>
       <BottomModal
         title={dayjs(currentDateString).format("MMMM D, YYYY")}

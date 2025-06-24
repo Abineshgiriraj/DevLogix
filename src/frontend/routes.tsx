@@ -5,6 +5,9 @@ import Calendar from "./screens/Calendar/Calendar";
 import Logs from "./screens/logs/Logs";
 import AuthScreen from "./screens/Auth/Login";
 import NotFound from "./components/NotFound/NotFound";
+import LearningHub from "./components/LearningHub/LearningHub";
+import Checklist from "./components/CheckList/Checklist";
+import OnlineCompiler from "./components/onlineComplier/OnlineComplier";
 
 const AllRoutes: React.FC = () => {
   return (
@@ -13,6 +16,9 @@ const AllRoutes: React.FC = () => {
       <Route path="/calendar" element={<Calendar />} />
       <Route path="/logs" element={<Logs />} />
       <Route path="/auth" element={<AuthScreen />} />
+      <Route path="/learninghub" element={<LearningHub />} />
+      <Route path="/checklist" element={<Checklist />} />
+      <Route path="/onlinecompiler" element={<OnlineCompiler />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

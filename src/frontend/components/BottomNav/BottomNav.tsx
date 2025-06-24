@@ -3,6 +3,9 @@ import {
   AppstoreOutlined,
   CalendarOutlined,
   FileTextOutlined,
+  BookOutlined,
+  CheckSquareOutlined,
+  CodeOutlined,
 } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import { BottomNavContainer, MenuWrapper } from "./BottomNavStyles";
@@ -54,11 +57,30 @@ const BottomNav: React.FC = () => {
       icon: <FileTextOutlined />,
       className: "menu-item",
     },
+    {
+      label: "Learning Hub",
+      key: "learninghub",
+      icon: <BookOutlined />,
+      className: "menu-item",
+    },
+    {
+      label: "Checklist",
+      key: "checklist",
+      icon: <CheckSquareOutlined />,
+      className: "menu-item",
+    },
+    {
+      label: "Online Compiler",
+      key: "onlinecompiler",
+      icon: <CodeOutlined />,
+      className: "menu-item",
+    },
   ];
 
   useEffect(() => {
-    setCurrentTab(location.pathname.replace("/", ""));
-  }, []);
+    const path = location.pathname.replace("/", "");
+    setCurrentTab(path || "dashboard");
+  }, [location.pathname]);
 
   return (
     <BottomNavContainer>

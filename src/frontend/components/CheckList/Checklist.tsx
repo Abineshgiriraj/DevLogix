@@ -1,116 +1,187 @@
 import React, { useState, useEffect } from 'react';
-import { Checkbox, Input, Button, message } from 'antd';
-import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { ChecklistItem } from './types';
 import {
-  ChecklistWrapper,
-  ChecklistHeader,
-  TaskList,
-  TaskItem,
-  AddTaskSection,
-  TaskActions,
-  EmptyState
-} from './CheckListStyle';
-import Header from '../Header/Header';
+  Container,
+  Header,
+  Title,
+  AddItemForm,
+  Input,
+  Button,
+  List,
+  ListItem,
+  Checkbox,
+  ItemText,
+  ButtonGroup,
+  IconButton,
+  SearchContainer,
+  NoItems
+} from './CheckListStyles';
 
-interface Task {
-  id: string;
-  text: string;
-  completed: boolean;
-}
+const STORAGE_KEY = 'checklist_items';
 
 const Checklist: React.FC = () => {
-  const [tasks, setTasks] = useState<Task[]>(() => {
-    const savedTasks = localStorage.getItem('preparationTasks');
-    return savedTasks ? JSON.parse(savedTasks) : [];
-  });
-  const [newTaskText, setNewTaskText] = useState('');
+  const [items, setItems] = useState<ChecklistItem[]>([]);
+  const [newItemText, setNewItemText] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [editingItem, setEditingItem] = useState<{ id: string; text: string } | null>(null);
 
+  // Load items from localStorage on mount
   useEffect(() => {
-    localStorage.setItem('preparationTasks', JSON.stringify(tasks));
-  }, [tasks]);
-
-  const addTask = () => {
-    if (!newTaskText.trim()) {
-      message.warning('Please enter a task');
-      return;
+    const savedItems = localStorage.getItem(STORAGE_KEY);
+    if (savedItems) {
+      setItems(JSON.parse(savedItems));
     }
+  }, []);
 
-    const newTask: Task = {
+  // Save items to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  }, [items]);
+
+  const addItem = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!newItemText.trim()) return;
+
+    const newItem: ChecklistItem = {
       id: Date.now().toString(),
-      text: newTaskText.trim(),
-      completed: false
+      text: newItemText.trim(),
+      completed: false,
+      createdAt: new Date().toISOString()
     };
 
-    setTasks([...tasks, newTask]);
-    setNewTaskText('');
-    message.success('Task added successfully');
+    setItems(prevItems => [...prevItems, newItem]);
+    setNewItemText('');
   };
 
-  const toggleTask = (taskId: string) => {
-    setTasks(tasks.map(task => 
-      task.id === taskId ? { ...task, completed: !task.completed } : task
-    ));
+  const toggleItem = (id: string) => {
+    setItems(prevItems =>
+      prevItems.map(item =>
+        item.id === id ? { ...item, completed: !item.completed } : item
+      )
+    );
   };
 
-  const deleteTask = (taskId: string) => {
-    setTasks(tasks.filter(task => task.id !== taskId));
-    message.success('Task deleted successfully');
+  const deleteItem = (id: string) => {
+    setItems(prevItems => prevItems.filter(item => item.id !== id));
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      addTask();
+  const startEditing = (item: ChecklistItem) => {
+    setEditingItem({ id: item.id, text: item.text });
+  };
+
+  const saveEdit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!editingItem) return;
+
+    setItems(prevItems =>
+      prevItems.map(item =>
+        item.id === editingItem.id ? { ...item, text: editingItem.text } : item
+      )
+    );
+    setEditingItem(null);
+  };
+
+  const clearAll = () => {
+    if (window.confirm('Are you sure you want to clear all items?')) {
+      setItems([]);
     }
   };
 
-  return (
-    <ChecklistWrapper>
-      <Header title="Preparation Checklist" />
-      
-      <AddTaskSection>
-        <Input
-          placeholder="Add a new task..."
-          value={newTaskText}
-          onChange={(e) => setNewTaskText(e.target.value)}
-          onKeyPress={handleKeyPress}
-        />
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          onClick={addTask}
-        >
-          Add Task
-        </Button>
-      </AddTaskSection>
+  const filteredItems = items.filter(item =>
+    item.text.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-      <TaskList>
-        {tasks.length === 0 ? (
-          <EmptyState>
-            No tasks yet. Add some tasks to track your preparation!
-          </EmptyState>
+  return (
+    <Container>
+      <Header>
+        <Title>Checklist</Title>
+        <SearchContainer>
+          <Input
+            type="text"
+            placeholder="Search items..."
+            value={searchTerm}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
+          />
+        </SearchContainer>
+      </Header>
+
+      <AddItemForm onSubmit={addItem}>
+        <Input
+          type="text"
+          placeholder="Add new item..."
+          value={newItemText}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewItemText(e.target.value)}
+        />
+        <Button type="submit" disabled={!newItemText.trim()}>
+          Add Item
+        </Button>
+      </AddItemForm>
+
+      {items.length > 0 && (
+        <Button
+          type="button"
+          $variant="danger"
+          onClick={clearAll}
+          style={{ marginBottom: '1rem' }}
+        >
+          Clear All
+        </Button>
+      )}
+
+      <List>
+        {filteredItems.length === 0 ? (
+          <NoItems>
+            {searchTerm ? 'No items match your search' : 'No items in the checklist'}
+          </NoItems>
         ) : (
-          tasks.map(task => (
-            <TaskItem key={task.id} completed={task.completed}>
+          filteredItems.map(item => (
+            <ListItem key={item.id}>
               <Checkbox
-                checked={task.completed}
-                onChange={() => toggleTask(task.id)}
-              >
-                {task.text}
-              </Checkbox>
-              <TaskActions>
-                <Button
-                  type="text"
-                  danger
-                  icon={<DeleteOutlined />}
-                  onClick={() => deleteTask(task.id)}
-                  aria-label="Delete task"
-                />
-              </TaskActions>
-            </TaskItem>
+                type="checkbox"
+                checked={item.completed}
+                onChange={() => toggleItem(item.id)}
+              />
+              {editingItem?.id === item.id ? (
+                <form onSubmit={saveEdit} style={{ flex: 1, display: 'flex', gap: '0.5rem' }}>
+                  <Input
+                    type="text"
+                    value={editingItem.text}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
+                      setEditingItem({ ...editingItem, text: e.target.value })}
+                    autoFocus
+                  />
+                  <Button type="submit" disabled={!editingItem.text.trim()}>
+                    Save
+                  </Button>
+                </form>
+              ) : (
+                <>
+                  <ItemText $completed={item.completed}>{item.text}</ItemText>
+                  <ButtonGroup>
+                    <IconButton
+                      type="button"
+                      onClick={() => startEditing(item)}
+                      title="Edit item"
+                    >
+                      <EditOutlined />
+                    </IconButton>
+                    <IconButton
+                      type="button"
+                      onClick={() => deleteItem(item.id)}
+                      className="delete"
+                      title="Delete item"
+                    >
+                      <DeleteOutlined />
+                    </IconButton>
+                  </ButtonGroup>
+                </>
+              )}
+            </ListItem>
           ))
         )}
-      </TaskList>
-    </ChecklistWrapper>
+      </List>
+    </Container>
   );
 };
 

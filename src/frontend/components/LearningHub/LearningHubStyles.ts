@@ -1,77 +1,104 @@
 import styled from 'styled-components';
 import { COLORS } from '../../utils/Colors';
 
-export const Wrapper = styled.div`
-  padding: 20px;
+export const Container = styled.div`
+  padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
-`;
-
-export const SearchContainer = styled.div`
-  margin-bottom: 30px;
   
-  input {
-    width: 100%;
-    padding: 12px 20px;
-    border: 2px solid ${COLORS.Primary};
-    border-radius: 8px;
-    font-size: 16px;
-    transition: all 0.3s ease;
-    
-    &:focus {
-      outline: none;
-      border-color: ${COLORS.Active};
-      box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
-    }
+  @media (max-width: 768px) {
+    padding: 1rem;
   }
 `;
 
-export const CategorySection = styled.section`
-  margin-bottom: 40px;
+export const Header = styled.div`
+  margin-bottom: 2rem;
 `;
 
-export const CategoryTitle = styled.h2`
+export const Title = styled.h1`
   color: ${COLORS.Primary};
-  font-size: 24px;
-  margin-bottom: 20px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid ${COLORS.Primary};
+  margin-bottom: 1rem;
+  font-size: 2rem;
+`;
+
+export const SearchContainer = styled.div`
+  margin-bottom: 2rem;
+`;
+
+export const SearchInput = styled.input`
+  width: 100%;
+  max-width: 400px;
+  padding: 0.75rem 1rem;
+  border: 1px solid ${COLORS.checkbox.border};
+  border-radius: 8px;
+  font-size: 1rem;
+  
+  &:focus {
+    outline: none;
+    border-color: ${COLORS.Primary};
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  }
+`;
+
+export const SectionContainer = styled.div`
+  margin-bottom: 3rem;
+`;
+
+export const SectionTitle = styled.h2`
+  color: ${COLORS.Secondary};
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  border-bottom: 2px solid ${COLORS.checkbox.border};
+  padding-bottom: 0.5rem;
 `;
 
 export const ArticlesGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+  gap: 1.5rem;
   
-  @media (max-width: 768px) {
+  @media (max-width: 640px) {
     grid-template-columns: 1fr;
   }
 `;
 
-export const ArticleCard = styled.article`
+export const ArticleCard = styled.div`
   background: ${COLORS.white};
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-4px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   }
 `;
 
 export const ArticleTitle = styled.h3`
   color: ${COLORS.Primary};
-  margin: 0 0 10px 0;
-  font-size: 18px;
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
 `;
 
 export const ArticleDescription = styled.p`
   color: ${COLORS.Secondary};
-  margin: 0 0 15px 0;
-  font-size: 14px;
+  margin-bottom: 1rem;
   line-height: 1.5;
+`;
+
+export const ArticleLink = styled.a`
+  display: inline-block;
+  color: ${COLORS.white};
+  background-color: ${COLORS.Primary};
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+  
+  &:hover {
+    background-color: ${COLORS.Active};
+  }
 `;
 
 export const ArticleSource = styled.span`

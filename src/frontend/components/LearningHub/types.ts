@@ -1,8 +1,19 @@
+export type Language = 'C' | 'Java' | 'Python';
+
 export interface Article {
   id: string;
   title: string;
-  category: 'C Language' | 'Java' | 'Python';
   description: string;
   link: string;
-  source: string;
+  language: Language;
+}
+
+export interface Section {
+  language: Language;
+  articles: Article[];
+}
+
+export interface SearchProps {
+  searchTerm: string;
+  onSearch: (term: string) => void;
 } 

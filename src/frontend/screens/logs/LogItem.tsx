@@ -14,7 +14,7 @@ interface LogItemProps {
 const LogItem = ({ log }: LogItemProps) => {
   const renderTimer = (type: string, time: number, totalMinutes: number = 120) => {
     const percent = calculatePercent(time, totalMinutes);
-    return (
+  return (
       <div className="timer-section">
         <div className="timer-header">
           <span className="title">{upperFirst(type)}</span>
@@ -27,10 +27,10 @@ const LogItem = ({ log }: LogItemProps) => {
               width: `${percent}%`,
               backgroundColor: COLORS.Active,
             }}
-          />
-        </div>
-      </div>
-    );
+                />
+              </div>
+            </div>
+          );
   };
 
   return (
@@ -47,7 +47,7 @@ const LogItem = ({ log }: LogItemProps) => {
             <span className="total-time">
               Total: {formatTimeString(log.totalTime)}
             </span>
-          </div>
+      </div>
         }
         key="1"
       >

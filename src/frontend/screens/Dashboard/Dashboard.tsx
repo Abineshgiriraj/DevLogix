@@ -6,7 +6,7 @@ import {
 import { Button, Modal, Progress } from "antd";
 import { debounce, isEqual } from "lodash";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import { defaultTimer, useTimer } from "../../context/TimerProvider";
 import { COLORS } from "../../utils/Colors";
@@ -18,9 +18,13 @@ import {
 } from "../../utils/helper";
 import {
   ButtonWrapper,
+  ContentContainer,
+  HeaderSection,
   LogoutBtnWrapper,
   ResetBtnWrapper,
-  TimerWrapper,
+  TimerItem,
+  TimerSection,
+  TotalTimeBox,
   ToggleButton,
   Wrapper,
 } from "./DashboardStyles";
@@ -46,12 +50,12 @@ const formatTime = (time: number) => {
 
   return (
     <>
-      <span className="time-value">{hours.toString()}</span>
-      <span className="time-label"> hr </span>
-      <span className="time-value">{minutes.toString().padStart(2, "0")}</span>
-      <span className="time-label"> min </span>
-      <span className="time-value">{seconds.toString().padStart(2, "0")}</span>
-      <span className="time-label"> sec</span>
+      <span className="value">{hours}</span>
+      <span className="unit">hr</span>
+      <span className="value">{minutes.toString().padStart(2, "0")}</span>
+      <span className="unit">min</span>
+      <span className="value">{seconds.toString().padStart(2, "0")}</span>
+      <span className="unit">sec</span>
     </>
   );
 };
@@ -65,9 +69,9 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const {
     timers,
+    setTimers,
     activeTimer,
     setActiveTimer,
-    setTimers,
     timersSnapshot,
     setTimersSnapshot,
     loading: loadingData,
@@ -77,6 +81,9 @@ const Dashboard = () => {
   const timersSnapshotRef = useRef(timersSnapshot);
   const debouncedSaveTimerDataToDBRef = useRef<any>();
   const dispatch = useDispatch<AppDispatch>();
+
+  const totalTime = timers.coding + timers.interview + timers.job;
+  const totalHours = Math.floor(totalTime / 3600);
 
   const handleClick = (type: TimerType) => {
     const isSameTimer = activeTimer === type;
@@ -197,6 +204,7 @@ const Dashboard = () => {
           onClick={logoutHandler}
         />
       </LogoutBtnWrapper>
+      
       <ResetBtnWrapper>
         <Button
           shape="circle"
@@ -205,66 +213,87 @@ const Dashboard = () => {
           onClick={resetTimer}
         />
       </ResetBtnWrapper>
-      <Header title="Dedicated Time" loading={loading} isDashboard={true} />
-      <TimerWrapper>
-        <div className="wrapper">
-          <span className="title">Coding</span>
-          <span className="timer">{formatTime(timers.coding)}</span>
-        </div>
-        <Progress
-          percent={calculatePercent(timers.coding, 360)}
-          strokeColor={COLORS.Active}
-          size={"small"}
-        />
-        <div className="wrapper">
-          <span className="title">Interview</span>
-          <span className="timer">{formatTime(timers.interview)}</span>
-        </div>
-        <Progress
-          percent={calculatePercent(timers.interview)}
-          strokeColor={COLORS.Active}
-          size={"small"}
-        />
-        <div className="wrapper">
-          <span className="title">Job</span>
-          <span className="timer">{formatTime(timers.job)}</span>
-        </div>
-        <Progress
-          percent={calculatePercent(timers.job)}
-          strokeColor={COLORS.Active}
-          size={"small"}
-        />
-      </TimerWrapper>
 
-      <ButtonWrapper>
-        <div>
-          <ToggleButton
-            isChecked={activeTimer === "coding"}
-            onClick={() => handleClick("coding")}
-          >
-            Coding
-          </ToggleButton>
-          <p>Project</p>
-        </div>
-        <div>
-          <ToggleButton
-            isChecked={activeTimer === "interview"}
-            onClick={() => handleClick("interview")}
-          >
-            Interview
-          </ToggleButton>
-          <p>Preparation</p>
-        </div>
-        <div>
-          <ToggleButton
-            isChecked={activeTimer === "job"}
-            onClick={() => handleClick("job")}
-          >
-            Job
-          </ToggleButton>
-          <p>Application</p>
-        </div>
-      </ButtonWrapper>
+      <ContentContainer>
+        <HeaderSection>
+          <h1>Dedicated Time</h1>
+          <TotalTimeBox>
+            {totalHours} hours
+          </TotalTimeBox>
+        </HeaderSection>
+
+        <TimerSection>
+          <TimerItem>
+            <div className="header">
+              <span className="label">Coding</span>
+              <span className="time">{formatTime(timers.coding)}</span>
+            </div>
+            <Progress
+              percent={calculatePercent(timers.coding, 360)}
+              strokeColor={COLORS.Active}
+              size="small"
+              className="progress"
+            />
+          </TimerItem>
+
+          <TimerItem>
+            <div className="header">
+              <span className="label">Interview</span>
+              <span className="time">{formatTime(timers.interview)}</span>
+            </div>
+            <Progress
+              percent={calculatePercent(timers.interview)}
+              strokeColor={COLORS.Active}
+              size="small"
+              className="progress"
+            />
+          </TimerItem>
+
+          <TimerItem>
+            <div className="header">
+              <span className="label">Job</span>
+              <span className="time">{formatTime(timers.job)}</span>
+            </div>
+            <Progress
+              percent={calculatePercent(timers.job)}
+              strokeColor={COLORS.Active}
+              size="small"
+              className="progress"
+            />
+          </TimerItem>
+        </TimerSection>
+
+        <ButtonWrapper>
+          <div>
+            <ToggleButton
+              isChecked={activeTimer === "coding"}
+              onClick={() => handleClick("coding")}
+            >
+              Coding
+            </ToggleButton>
+            <p>Project</p>
+          </div>
+          <div>
+            <ToggleButton
+              isChecked={activeTimer === "interview"}
+              onClick={() => handleClick("interview")}
+            >
+              Interview
+            </ToggleButton>
+            <p>Preparation</p>
+          </div>
+          <div>
+            <ToggleButton
+              isChecked={activeTimer === "job"}
+              onClick={() => handleClick("job")}
+            >
+              Job
+            </ToggleButton>
+            <p>Application</p>
+          </div>
+        </ButtonWrapper>
+      </ContentContainer>
+
       {loadingData && <Loader />}
     </Wrapper>
   );

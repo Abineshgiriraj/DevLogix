@@ -1,88 +1,88 @@
 import React, { useState, useMemo } from 'react';
 import { articles } from './articleData';
-import { Article } from './types';
+import { Article, Language, Section } from './types';
 import {
-  Wrapper,
+  Container,
+  Header,
+  Title,
   SearchContainer,
-  CategorySection,
-  CategoryTitle,
+  SearchInput,
+  SectionContainer,
+  SectionTitle,
   ArticlesGrid,
   ArticleCard,
   ArticleTitle,
   ArticleDescription,
-  ArticleSource,
-  ReadMoreButton,
-  CardFooter,
+  ArticleLink
 } from './LearningHubStyles';
-import Header from '../Header/Header';
 
 const LearningHub: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
 
   const filteredArticles = useMemo(() => {
-    if (!searchQuery.trim()) return articles;
+    if (!searchTerm.trim()) return articles;
 
-    const query = searchQuery.toLowerCase();
-    return articles.filter(
-      (article) =>
-        article.title.toLowerCase().includes(query) ||
-        article.description.toLowerCase().includes(query) ||
-        article.category.toLowerCase().includes(query)
+    const lowerSearchTerm = searchTerm.toLowerCase();
+    return articles.filter(article =>
+      article.title.toLowerCase().includes(lowerSearchTerm) ||
+      article.description.toLowerCase().includes(lowerSearchTerm)
     );
-  }, [searchQuery]);
+  }, [searchTerm]);
 
-  const categories = useMemo(() => {
-    return [...new Set(articles.map(article => article.category))].sort();
-  }, []);
+  const sections = useMemo(() => {
+    const grouped: { [key in Language]?: Article[] } = {};
+    filteredArticles.forEach(article => {
+      if (!grouped[article.language]) {
+        grouped[article.language] = [];
+      }
+      grouped[article.language]?.push(article);
+    });
 
-  const articlesByCategory = useMemo(() => {
-    return categories.reduce<Record<string, Article[]>>((acc, category) => {
-      acc[category] = filteredArticles.filter(
-        article => article.category === category
-      );
-      return acc;
-    }, {});
-  }, [categories, filteredArticles]);
+    return (['C', 'Java', 'Python'] as const).map(language => ({
+      language,
+      articles: grouped[language] || []
+    }));
+  }, [filteredArticles]);
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
 
   return (
-    <Wrapper>
-      <Header title="Learning Hub" />
-      
-      <SearchContainer>
-        <input
-          type="text"
-          placeholder="Search articles by title, description, or category..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          aria-label="Search articles"
-        />
-      </SearchContainer>
+    <Container>
+      <Header>
+        <Title>Learning Hub</Title>
+        <SearchContainer>
+          <SearchInput
+            type="text"
+            placeholder="Search articles..."
+            value={searchTerm}
+            onChange={handleSearch}
+          />
+        </SearchContainer>
+      </Header>
 
-      {categories.map((category) => (
-        <CategorySection key={category}>
-          <CategoryTitle>{category}</CategoryTitle>
+      {sections.map((section: Section) => (
+        <SectionContainer key={section.language}>
+          <SectionTitle>{section.language}</SectionTitle>
           <ArticlesGrid>
-            {articlesByCategory[category].map((article) => (
+            {section.articles.map(article => (
               <ArticleCard key={article.id}>
                 <ArticleTitle>{article.title}</ArticleTitle>
                 <ArticleDescription>{article.description}</ArticleDescription>
-                <CardFooter>
-                  <ArticleSource>Source: {article.source}</ArticleSource>
-                  <ReadMoreButton
-                    href={article.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Read more about ${article.title}`}
-                  >
-                    Read More
-                  </ReadMoreButton>
-                </CardFooter>
+                <ArticleLink
+                  href={article.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Read More
+                </ArticleLink>
               </ArticleCard>
             ))}
           </ArticlesGrid>
-        </CategorySection>
+        </SectionContainer>
       ))}
-    </Wrapper>
+    </Container>
   );
 };
 
