@@ -9,7 +9,7 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 110px;
-  background: linear-gradient(to bottom, ${COLORS.white}, #f8f9fa);
+  background: ${COLORS.white};
   
   @media screen and (min-width: 800px) {
     height: 670px;
@@ -22,10 +22,12 @@ export const Wrapper = styled.div`
 export const CalendarContainer = styled.div`
   .ant-picker-calendar {
     background: ${COLORS.white};
-    border-radius: 16px;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    border-radius: 0;
+    box-shadow: none;
     overflow: hidden;
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    border: none;
+    max-width: 400px;
+    margin: 0 auto;
   }
 
   .ant-picker-calendar-full .ant-picker-panel {
@@ -33,113 +35,115 @@ export const CalendarContainer = styled.div`
   }
 
   .ant-picker-cell {
-    padding: 6px !important;
-    height: 100px !important;
-    transition: all 0.3s ease;
+    padding: 4px !important;
+    height: 48px !important;
+    transition: all 0.2s ease;
+    text-align: center;
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.02);
+      background-color: #f0f0f0;
     }
   }
 
   .ant-picker-calendar-date {
     height: 100% !important;
     margin: 0 !important;
-    padding: 6px !important;
+    padding: 4px !important;
     border: none !important;
-    border-radius: 12px !important;
-    transition: all 0.3s ease;
+    border-radius: 0 !important;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     
     &:hover {
-      background-color: rgba(0, 0, 0, 0.02);
+      background-color: #f0f0f0;
     }
   }
 
   .ant-picker-cell-today .ant-picker-calendar-date {
-    border: 2px solid ${COLORS.Primary}40 !important;
-    background-color: ${COLORS.Primary}05 !important;
+    border: none !important;
+    background-color: #f0f0f0 !important;
+    font-weight: bold;
   }
 
   .ant-picker-calendar-date-value {
-    color: ${COLORS.Secondary};
-    font-weight: 600;
-    margin: 0 0 6px 6px;
-    font-size: 0.9rem;
+    color: #000000;
+    font-weight: normal;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1;
+    position: relative;
   }
 
   .ant-picker-cell-in-view {
-    color: ${COLORS.Secondary} !important;
+    color: #000000 !important;
   }
 
   .ant-picker-calendar-date-content {
-    height: calc(100% - 24px) !important;
+    display: none;
   }
 
   .calendar-navigation {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 24px;
-    margin-bottom: 32px;
-    padding: 0 24px;
-    background: ${COLORS.white};
-    border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-    height: 64px;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding: 0;
+    height: 48px;
   }
 
   .nav-button {
     border: none;
     background: transparent;
-    font-size: 22px;
+    font-size: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    transition: all 0.3s ease;
-    color: ${COLORS.Primary};
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    color: #000000;
+    cursor: pointer;
 
     &:hover {
-      background: ${COLORS.Primary}10;
-      transform: scale(1.05);
-    }
-
-    &:active {
-      transform: scale(0.95);
+      background: #f0f0f0;
     }
 
     .anticon {
-      color: ${COLORS.Primary};
+      color: #000000;
     }
   }
 
   .current-month {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: ${COLORS.Primary};
-    min-width: 180px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #000000;
+    min-width: 120px;
     text-align: center;
-    letter-spacing: -0.5px;
   }
 
   .ant-picker-content {
     th {
-      padding: 12px 0;
-      font-weight: 600;
-      color: ${COLORS.Secondary};
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      padding: 8px 0;
+      font-weight: normal;
+      color: #666666;
+      font-size: 14px;
+      text-transform: none;
+      text-align: center;
+    }
+
+    td {
+      border: none;
     }
   }
 
   @media screen and (min-width: 800px) {
     padding: 24px;
     background: ${COLORS.white};
-    border-radius: 16px;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    border-radius: 0;
+    box-shadow: none;
   }
 `;
 
@@ -147,55 +151,40 @@ export const DateCell = styled.div<{ backgroundColor: string; isToday: boolean }
   height: 100%;
   width: 100%;
   display: flex;
-  flex-direction: column;
-  background-color: ${props => props.backgroundColor};
-  border-radius: 12px;
-  padding: 8px;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
   position: relative;
   cursor: pointer;
-  transition: all 0.3s ease;
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
 
   ${props => props.isToday && `
-    border: 2px solid ${COLORS.Primary}40;
-    background-color: ${COLORS.Primary}05;
+    font-weight: bold;
+    background-color: #f0f0f0;
   `}
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    background-color: #f0f0f0;
   }
 
   .date-number {
-    color: ${COLORS.Secondary};
-    font-weight: 600;
-    margin-bottom: 6px;
-    font-size: 0.9rem;
+    color: #000000;
+    font-size: 14px;
   }
 
   .note-indicator {
     position: absolute;
-    bottom: 6px;
-    right: 6px;
-    width: 8px;
-    height: 8px;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
     border-radius: 50%;
-    background-color: ${COLORS.Primary};
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8);
+    background-color: #666666;
   }
 
   .activity-indicators {
-    display: flex;
-    gap: 3px;
-    margin-top: 4px;
-    flex-wrap: wrap;
-  }
-
-  .activity-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4);
+    display: none;
   }
 `;
 
