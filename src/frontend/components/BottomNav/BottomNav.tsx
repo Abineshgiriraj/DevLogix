@@ -6,6 +6,7 @@ import {
   BookOutlined,
   CheckSquareOutlined,
   CodeOutlined,
+  QuestionCircleOutlined,
 } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import { BottomNavContainer, MenuWrapper } from "./BottomNavStyles";
@@ -61,6 +62,12 @@ const BottomNav: React.FC = () => {
       label: "Learning Hub",
       key: "learninghub",
       icon: <BookOutlined />,
+      className: "menu-item",
+    },
+    {
+      label: "Problems",
+      key: "problems",
+      icon: <QuestionCircleOutlined />,
       className: "menu-item",
     },
     {

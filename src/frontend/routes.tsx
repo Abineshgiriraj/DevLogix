@@ -9,6 +9,7 @@ import LearningHub from "./components/LearningHub/LearningHub";
 import Checklist from "./components/CheckList/Checklist";
 import OnlineCompiler from "./components/onlineComplier/OnlineComplier";
 import CreativeLogs from "./screens/logs/CreativeLogs";
+import ProblemSet from "./components/ProblemSet/ProblemSet";
 
 const AllRoutes: React.FC = () => {
   return (
@@ -21,6 +22,7 @@ const AllRoutes: React.FC = () => {
       <Route path="/learninghub" element={<LearningHub />} />
       <Route path="/checklist" element={<Checklist />} />
       <Route path="/onlinecompiler" element={<OnlineCompiler />} />
+      <Route path="/problems" element={<ProblemSet />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
