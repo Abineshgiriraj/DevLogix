@@ -81,4 +81,52 @@ export const QuoteText = styled.span`
   @media (max-width: 768px) {
     font-size: 0.9rem;
   }
+`;
+
+export const BrandCover = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 300px;
+  height: 60px;
+  background: ${COLORS.Primary};
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 15px;
+  color: white;
+  font-size: 0.9rem;
+  animation: shimmer 3s infinite;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      transparent 100%
+    );
+    animation: shine 3s infinite;
+  }
+
+  @keyframes shine {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes shimmer {
+    0%, 100% { opacity: 0.95; }
+    50% { opacity: 0.98; }
+  }
 `; 

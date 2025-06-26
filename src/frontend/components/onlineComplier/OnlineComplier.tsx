@@ -4,8 +4,7 @@ import {
   CompilerTitle,
   IframeWrapper,
   CompilerIframe,
-  BrandOverlay,
-  RocketIcon
+  BrandCover
 } from './OnlineComplierStyles';
 
 const OnlineCompiler: React.FC = () => {
@@ -13,10 +12,9 @@ const OnlineCompiler: React.FC = () => {
     <CompilerContainer>
       <CompilerTitle>Python Online Compiler</CompilerTitle>
       <IframeWrapper>
-        <BrandOverlay>
-          <RocketIcon>🚀</RocketIcon>
-          TerminalX Engine
-        </BrandOverlay>
+        <BrandCover>
+          <span>🌟 Premium Coding Environment 🌟</span>
+        </BrandCover>
         <CompilerIframe
           src="https://onecompiler.com/python"
           title="Python Online Compiler"
