@@ -6,6 +6,10 @@ import React, {
   useState,
 } from "react";
 import { GET, getCurrentDate, POST } from "../utils/helper";
+import { useDispatch } from "react-redux";
+import { addLocalLog } from "../reducer/logSlice";
+import { v4 as uuidv4 } from 'uuid';
+
 interface TimerContextType {
   timers: TimerState;
   activeTimer: TimerType;
@@ -42,6 +46,7 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({
   const [activeTimer, setActiveTimer] = useState<TimerType>(null);
   const [timersSnapshot, setTimersSnapshot] = useState(defaultTimer);
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
   let interval = useRef<NodeJS.Timeout>();
   let counter = useRef(0);
 
@@ -56,8 +61,39 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({
       date: currentDate,
       tasks,
     };
-    await POST("dashboard/", data);
-    setTimersSnapshot(tasks);
+    
+    try {
+      // Save to backend
+      await POST("dashboard/", data);
+      setTimersSnapshot(tasks);
+
+      // Create local log entry
+      const logEntry = {
+        date: currentDate.toString(),
+        tasks,
+        totalTime: Object.values(tasks).reduce((a, b) => a + b, 0),
+        _id: uuidv4(),
+        userId: 'local',
+        __v: 0,
+        activeTimer: activeTimer || ''
+      };
+      
+      // Update Redux store and localStorage
+      dispatch(addLocalLog(logEntry));
+    } catch (error) {
+      console.error('Error saving timer data:', error);
+      // Even if backend fails, save locally
+      const logEntry = {
+        date: currentDate.toString(),
+        tasks,
+        totalTime: Object.values(tasks).reduce((a, b) => a + b, 0),
+        _id: uuidv4(),
+        userId: 'local',
+        __v: 0,
+        activeTimer: activeTimer || ''
+      };
+      dispatch(addLocalLog(logEntry));
+    }
   };
 
   useEffect(() => {
@@ -73,6 +109,10 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({
       interval.current = setInterval(() => {
         setTimers((prevTimers) => {
           const updatedTime = prevTimers[activeTimer] - 1;
+          if (updatedTime === 0) {
+            // Timer completed, save the final state
+            saveTimerDataToDB();
+          }
           return {
             ...prevTimers,
             [activeTimer]: updatedTime >= 0 ? updatedTime : 0,
@@ -80,9 +120,17 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({
         });
       }, 1000);
     } else {
-      clearInterval(interval.current);
+      if (interval.current) {
+        clearInterval(interval.current);
+        // Save data when timer is stopped
+        saveTimerDataToDB();
+      }
     }
-    return () => clearInterval(interval.current);
+    return () => {
+      if (interval.current) {
+        clearInterval(interval.current);
+      }
+    };
   }, [activeTimer]);
 
   return (

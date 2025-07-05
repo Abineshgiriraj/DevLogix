@@ -16,13 +16,13 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Router>
-      <MessageProvider>
-        <TimerProvider>
-          <Provider store={store}>
+      <Provider store={store}>
+        <MessageProvider>
+          <TimerProvider>
             <App />
-          </Provider>
-        </TimerProvider>
-      </MessageProvider>
+          </TimerProvider>
+        </MessageProvider>
+      </Provider>
     </Router>
   </React.StrictMode>
 );
