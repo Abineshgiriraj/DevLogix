@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Dashboard from "./screens/Dashboard/Dashboard";
 import Calendar from "./screens/Calendar/Calendar";
 import Logs from "./screens/logs/Logs";
-import AuthScreen from "./screens/Auth/Login";
+// ...existing code...
 import NotFound from "./components/NotFound/NotFound";
 import LearningHub from "./components/LearningHub/LearningHub";
 import Checklist from "./components/CheckList/Checklist";
@@ -18,7 +18,7 @@ const AllRoutes: React.FC = () => {
       <Route path="/calendar" element={<Calendar />} />
       <Route path="/logs" element={<CreativeLogs />} />
       <Route path="/logs-old" element={<Logs />} />
-      <Route path="/auth" element={<AuthScreen />} />
+      {/* Removed Auth route */}
       <Route path="/learninghub" element={<LearningHub />} />
       <Route path="/checklist" element={<Checklist />} />
       <Route path="/onlinecompiler" element={<OnlineCompiler />} />

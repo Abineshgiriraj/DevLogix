@@ -148,7 +148,7 @@ const Dashboard = () => {
       dispatch(clearLogs());
       setActiveTimer(null);
       clearLocalStorage();
-      navigate("/auth");
+      // Removed redirect to auth
     } catch (error) {
       console.error('Error during logout:', error);
     }

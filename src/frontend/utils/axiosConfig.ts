@@ -20,7 +20,7 @@ api.interceptors.request.use(
         }
       } catch (error) {
         localStorage.clear();
-        window.location.href = '/login';
+        // Removed redirect to login
       }
     }
     return config;
@@ -38,7 +38,7 @@ api.interceptors.response.use(
       // Handle 401 Unauthorized
       if (error.response.status === 401) {
         localStorage.clear();
-        window.location.href = '/login';
+        // Removed redirect to login
         return Promise.reject(new Error('Session expired. Please log in again.'));
       }
       // Handle rate limiting

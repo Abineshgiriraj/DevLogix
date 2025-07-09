@@ -7,7 +7,7 @@ import { clearLocalStorage, getLocalStorage } from "./frontend/utils/helper";
 
 function App() {
   const location = useLocation();
-  const ShowBottomNav = !location.pathname.includes("auth");
+  const ShowBottomNav = true; // Always show bottom nav now
   const navigate = useNavigate();
 
   const checkUserLogin = () => {
@@ -17,7 +17,7 @@ function App() {
     if (token && JSON.parse(token).expiry > today) {
       navigate(location.pathname);
     } else {
-      navigate("/auth");
+      // Removed redirect to auth
       clearLocalStorage();
     }
   };
