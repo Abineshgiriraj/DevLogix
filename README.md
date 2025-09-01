@@ -38,13 +38,34 @@ So, I decided to create DevLogix — a tool that combines all three in one seaml
    git clone https://github.com/Abineshgiriraj/DevLogix
    cd DevLogix
 
-2.Install dependencies:
+2. **Install dependencies**
    ```bash
    npm install
+   ```
 
-3.Start the development server:
+3. **Start the development server**
    ```bash
    npm start
+   ```
+
+4. **Open in browser**
+   ```
+   http://localhost:3000
+   ```
+
+✅ That’s it! DevLogix should now be running on your local machine.
+
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome!  
+Feel free to fork this repo and submit a pull request.
+
+## 👤 Author
+
+**AbineshGiriraj**  
+- GitHub: (https://https://github.com/Abineshgiriraj)  
+- LinkedIn: (https://www.linkedin.com/in/abinesh-giriraj-429279265/)
 
 
 
