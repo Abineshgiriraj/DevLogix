@@ -38,3 +38,13 @@ So, I decided to create DevLogix — a tool that combines all three in one seaml
    git clone https://github.com/Abineshgiriraj/DevLogix
    cd DevLogix
 
+2.Install dependencies:
+   ```bash
+   npm install
+
+3.Start the development server:
+   ```bash
+   npm start
+
+
+
